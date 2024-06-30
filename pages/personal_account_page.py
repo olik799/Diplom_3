@@ -3,6 +3,7 @@ import requests
 
 from pages.base_page import BasePage
 from locators.personal_account_locators import PersonalAccountLocators
+from locators.main_functional_locators import MainFunctionalLocators
 from data import urls, generate_user
 
 
@@ -20,26 +21,30 @@ class PersonalAccountPage(BasePage):
         return payload, auth
 
     @allure.step('Авторизация на сайте')
-    def signup(self, payload):
-        self.navigate(urls.LOGIN_URL)
-        self.enter_text(PersonalAccountLocators.EMAIL_FIELD, payload['email'])
-        self.enter_text(PersonalAccountLocators.PASSWORD_FIELD, payload['password'])
-        self.click_element(PersonalAccountLocators.INPUT_BUTTON)
-        self.wait_for_element_visible(PersonalAccountLocators.MAKE_BURGER_HEADER)
+    def signup(self, email, password):
+        self.enter_text(PersonalAccountLocators.EMAIL_FIELD, 10, email)
+        self.enter_text(PersonalAccountLocators.PASSWORD_FIELD, 10, password)
+        self.click_element(PersonalAccountLocators.INPUT_BUTTON, 10)
+        self.wait_for_element_visible(MainFunctionalLocators.PLACE_ORDER_BUTTON, 10)
 
     @allure.step('Вход в личный кабинет')
     def personal_account(self):
-        self.click_element(PersonalAccountLocators.PERSONAL_ACCOUNT_BUTTON)
-        self.wait_for_element_visible(PersonalAccountLocators.PROFILE_HEADER)
+        self.click_element(PersonalAccountLocators.PERSONAL_ACCOUNT_BUTTON, 10)
+        self.wait_for_element_visible(PersonalAccountLocators.INPUT_HEADER, 10)
+
+    @allure.step('Переходд в личный кабинет')
+    def to_personal_account(self):
+        self.click_element_script(PersonalAccountLocators.PERSONAL_ACCOUNT_BUTTON, 10)
+        self.wait_for_element_visible(PersonalAccountLocators.PROFILE_HEADER, 10)
 
     @allure.step('Переход в историю заказов')
     def order_history(self):
-        self.click_element(PersonalAccountLocators.ORDER_HISTORY)
+        self.click_element(PersonalAccountLocators.ORDER_HISTORY, 10)
 
     @allure.step('Выход из аккаунта')
     def logout(self):
-        self.click_element(PersonalAccountLocators.EXIT_BUTTON)
-        self.wait_for_element_visible(PersonalAccountLocators.INPUT_HEADER)
+        self.click_element(PersonalAccountLocators.EXIT_BUTTON, 10)
+        self.wait_for_element_visible(PersonalAccountLocators.INPUT_HEADER, 10)
 
     @allure.step('Получить адрес текущей страницы')
     def current_url(self):

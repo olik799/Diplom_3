@@ -14,16 +14,18 @@ class TestRecoverPassword:
 
     @allure.title('Ввод почты')
     def test_set_email(self, driver):
+        user_data = generate_user.generate_data_for_new_user()
         recover_page = RecoverPasswordPage(driver)
         recover_page.load_recover_page()
-        recover_page.set_email()
-        assert recover_page.get_value_field() == 'testmail@test.ma'
+        recover_page.set_email(user_data.get('email'))
+        assert recover_page.get_value_field() == user_data.get('email')
 
     @allure.title('Клик по кнопке "Восстановить"')
     def test_click_recover_button(self, driver):
+        user_data = generate_user.generate_data_for_new_user()
         recover_page = RecoverPasswordPage(driver)
         recover_page.load_recover_page()
-        recover_page.set_email()
+        recover_page.set_email(user_data.get('email'))
         recover_page.click_recover_button()
         assert recover_page.current_url() == urls.RESET_PASSWORD
 
